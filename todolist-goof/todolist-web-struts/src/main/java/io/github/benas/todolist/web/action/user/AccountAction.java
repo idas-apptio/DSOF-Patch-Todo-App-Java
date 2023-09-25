@@ -33,6 +33,7 @@ import io.github.benas.todolist.web.common.form.ChangePasswordForm;
 import io.github.benas.todolist.web.common.form.RegistrationForm;
 import io.github.benas.todolist.web.common.util.TodoListUtils;
 import io.github.todolist.core.domain.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.ConstraintViolation;
 import java.text.MessageFormat;
@@ -247,11 +248,21 @@ public class AccountAction extends BaseAction {
     }
 
     private boolean newPasswordDoesNotMatchConfirmationPassword() {
-        return !changePasswordForm.getNewPassword().equals(changePasswordForm.getConfirmationPassword());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String newPassword = changePasswordForm.getNewPassword();
+        String confirmationPassword = changePasswordForm.getConfirmationPassword();
+
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        String encodedConfirmationPassword = passwordEncoder.encode(confirmationPassword);
+        return !encodedNewPassword.equals(encodedConfirmationPassword);
     }
 
     private boolean incorrectCurrentPassword(User user) {
-        return !changePasswordForm.getCurrentPassword().equals(user.getPassword());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String currentPassword = changePasswordForm.getCurrentPassword();
+        String storedPassword = user.getPassword();
+
+        return !passwordEncoder.matches(currentPassword, storedPassword);
     }
 
     private void validateChangePasswordForm() {
