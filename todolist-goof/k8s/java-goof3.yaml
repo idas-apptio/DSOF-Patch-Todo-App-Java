@@ -21,7 +21,26 @@ spec:
         imagePullPolicy: Always
         name: java-goof
         securityContext:
-          readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CAPABILITY1
+                - CAPABILITY2
+        resources:
+          limits:
+            cpu: "1" # Set the required CPU limit value (e.g., 1 CPU core)
+            memory: "512Mi" # Set the required memory limit value (e.g., 512 megabytes)
+        livenessProbe:
+          httpGet:
+            path: /healthz  # Adjust the path to match your application's health check endpoint
+            port: 80          # Adjust the port to match your application's container port
+          initialDelaySeconds: 30  # Delay before the first probe
+          periodSeconds: 10
         volumeMounts:
           - mountPath: /usr/local/tomcat/temp
             name: tomcat-temp
@@ -47,6 +66,9 @@ metadata:
   name: goof
 spec:
   type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 192.168.1.10/32   # Specific IP address
+    - 192.168.2.0/24    # IP range
   ports:
     - port: 80
       protocol: TCP
