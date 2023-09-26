@@ -4085,6 +4085,10 @@ spec:
         - name: upgrade-ipam
           image: docker.io/calico/cni:v3.21.2
           command: ["/opt/cni/bin/calico-ipam", "-upgrade"]
+          resources:
+            limits:
+              memory: "512Mi"  # Set the memory limit to 512 megabytes
+              cpu: "0.5"       # Set the CPU limit to 0.5 cores (500 milliCPU)
           envFrom:
           - configMapRef:
               # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
