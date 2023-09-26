@@ -4291,9 +4291,6 @@ spec:
               add:
                 - CAPABILITY1
                 - CAPABILITY2
-          resources:
-            requests:
-              cpu: 250m
           lifecycle:
             preStop:
               exec:
