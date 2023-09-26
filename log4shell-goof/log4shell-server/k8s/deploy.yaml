@@ -25,6 +25,27 @@ spec:
         - name: ldap
           image: ${DOCKER_ACCOUNT}/log4shell-server:latest
           imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CAPABILITY1
+                - CAPABILITY2
+          resources:
+            limits:
+              cpu: "1" # Set the required CPU limit value (e.g., 1 CPU core)
+              memory: "512Mi" # Set the required memory limit value (e.g., 512 megabytes)
+          livenessProbe:
+            httpGet:
+              path: /healthz  # Adjust the path to match your application's health check endpoint
+              port: 80          # Adjust the port to match your application's container port
+            initialDelaySeconds: 30  # Delay before the first probe
+            periodSeconds: 10        # Interval between probes
 ---
 apiVersion: v1
 kind: Service
