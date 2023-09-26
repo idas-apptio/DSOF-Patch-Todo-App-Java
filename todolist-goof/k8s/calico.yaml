@@ -4109,6 +4109,7 @@ spec:
             privileged: false
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -4158,6 +4159,8 @@ spec:
             privileged: false
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            runAsUser: 10000
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -4175,6 +4178,8 @@ spec:
             privileged: false
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            runAsUser: 10000
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -4260,6 +4265,8 @@ spec:
             privileged: false
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            runAsUser: 10000
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -4318,7 +4325,7 @@ spec:
               mountPath: /sys/fs/
               # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
               # If the host is known to mount that filesystem already then Bidirectional can be omitted.
-              mountPropagation: Bidirectional
+              mountPropagation: None
             - name: cni-log-dir
               mountPath: /var/log/calico/cni
               readOnly: true
@@ -4429,6 +4436,17 @@ spec:
             initialDelaySeconds: 10
             failureThreshold: 6
             timeoutSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 10000
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CAPABILITY1
+                - CAPABILITY2
           readinessProbe:
             exec:
               command:
