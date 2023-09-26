@@ -4179,6 +4179,10 @@ spec:
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
           image: docker.io/calico/pod2daemon-flexvol:v3.21.2
+          resources:
+            limits:
+              memory: "512Mi"  # Set the memory limit to 512 megabytes
+              cpu: "0.5"       # Set the CPU limit to 0.5 cores (500 milliCPU)
           volumeMounts:
           - name: flexvol-driver-host
             mountPath: /host/driver
